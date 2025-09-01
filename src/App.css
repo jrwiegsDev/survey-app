@@ -1,0 +1,229 @@
+:root {
+    --background-dark: #1A1A2E;
+    --panel-background: #16213E;
+    --accent-primary: #0F3460;
+    --accent-secondary: #48D1CC;
+    --accent-warning: #E94560;
+    --text-primary: #E3E3E3;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+}
+
+.app-container {
+    text-align: center;
+}
+
+.app-header {
+    background-color: var(--panel-background);
+    padding: 1rem;
+    border-bottom: 2px solid var(--accent-primary);
+}
+
+.main-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.polls-column,
+.results-column {
+    flex: 1;
+    background-color: var(--panel-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+/* --- Corrected Polls Column Layout --- */
+.polls-column {
+    display: flex;
+    /* The column itself is a flex container */
+    flex-direction: column;
+    /* Stack the title and the grid vertically */
+    gap: 1rem;
+}
+
+.polls-column h2 {
+    margin: 0;
+    flex-shrink: 0;
+    /* Prevent the title from shrinking */
+}
+
+/* This is our new grid container for the actual polls */
+.polls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    /* 3 rows of equal height */
+    gap: 1rem;
+    flex-grow: 1;
+    /* This makes the grid fill the available space */
+}
+
+.poll-container {
+    border: 1px solid var(--accent-primary);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-container h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.poll-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    /* Reduced gap between options */
+    flex-grow: 1;
+    justify-content: center;
+    /* Vertically center the options */
+}
+
+/* --- Custom Radio Button Styles --- */
+.poll-option {
+    position: relative;
+}
+
+.poll-option input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+.poll-option label {
+    display: inline-block;
+    background-color: var(--background-dark);
+    padding: 0.4rem 0.4rem 0.4rem 2.25rem;
+    /* Reduced padding */
+    border-radius: 5px;
+    border: 1px solid var(--accent-primary);
+    transition: background-color 0.2s;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    /* Reduced font size */
+}
+
+.poll-option label::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    /* Made the circle smaller */
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-primary);
+    background-color: var(--background-dark);
+}
+
+.poll-option:hover label {
+    background-color: var(--accent-primary);
+}
+
+.poll-option input[type="radio"]:checked+label {
+    background-color: var(--accent-primary);
+    font-weight: bold;
+}
+
+.poll-option input[type="radio"]:checked+label::before {
+    background-color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-content: flex-start;
+}
+
+.poll-results-container {
+    text-align: left;
+}
+
+.poll-results-container h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.result-option {
+    margin-bottom: 0.5rem;
+}
+
+.result-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.result-bar-background {
+    width: 100%;
+    background-color: var(--background-dark);
+    border-radius: 5px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.result-bar-foreground {
+    height: 100%;
+    background-color: var(--accent-secondary);
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Style for polls that have been voted on */
+.poll-option input[type="radio"]:disabled+label {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.voted-overlay {
+    font-size: 0.8rem;
+    color: var(--accent-warning);
+    text-align: center;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+.top-result {
+    font-weight: bold;
+    color: #00BFFF;
+}
+
+.top-result-bar {
+    background-color: #00BFFF !important;
+}
+
+.reset-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: 1px solid var(--accent-secondary);
+    color: var(--accent-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reset-button:hover {
+    background-color: var(--accent-secondary);
+    color: var(--background-dark);
+}
