@@ -8,7 +8,10 @@ const app = express();
 const port = 5001;
 
 // --- Middleware ---
-app.use(cors());
+const corsOptions = {
+  origin: 'https://survey-app-zuvw.onrender.com'
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // --- MongoDB Connection ---
