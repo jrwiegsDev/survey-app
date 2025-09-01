@@ -1,3 +1,4 @@
+// Load environment variables from a .env file
 require('dotenv').config();
 
 const express = require('express');
@@ -8,10 +9,8 @@ const app = express();
 const port = 5001;
 
 // --- Middleware ---
-const corsOptions = {
-  origin: 'https://survey-app-zuvw.onrender.com'
-};
-app.use(cors(corsOptions));
+// Allow requests from any origin - the standard for a public API
+app.use(cors());
 app.use(express.json());
 
 // --- MongoDB Connection ---
@@ -21,7 +20,7 @@ mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB Atlas connected successfully.'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// --- Mongoose Schema (The structure of our data) ---
+// --- Mongoose Data Schema ---
 const optionSchema = new mongoose.Schema({
   id: String,
   text: String,
@@ -38,7 +37,7 @@ const Poll = mongoose.model('Poll', pollSchema);
 
 // --- API Endpoints ---
 
-// GET Endpoint: Fetches all polls from the database
+// GET /api/polls: Fetches all polls from the database
 app.get('/api/polls', async (req, res) => {
   try {
     const polls = await Poll.find();
@@ -48,29 +47,25 @@ app.get('/api/polls', async (req, res) => {
   }
 });
 
-// POST Endpoint: Handles a new vote
+// POST /api/polls/vote: Finds a poll and option by ID and increments the vote
 app.post('/api/polls/vote', async (req, res) => {
   const { pollId, optionId } = req.body;
   try {
-    // Find the poll and the specific option, then increment the vote count
-    const poll = await Poll.findOne({ id: pollId, 'options.id': optionId });
-    if (poll) {
-      await Poll.updateOne(
-        { id: pollId, 'options.id': optionId },
-        { $inc: { 'options.$.votes': 1 } }
-      );
-      // Fetch and return all polls so the front-end can update
-      const updatedPolls = await Poll.find();
-      res.json(updatedPolls);
-    } else {
-      res.status(404).json({ message: 'Poll or option not found' });
-    }
+    // Find the specific option within a poll and increment its vote count by 1
+    await Poll.updateOne(
+      { id: pollId, 'options.id': optionId },
+      { $inc: { 'options.$.votes': 1 } }
+    );
+    
+    // Fetch and return the updated list of all polls
+    const updatedPolls = await Poll.find();
+    res.json(updatedPolls);
   } catch (err) {
     res.status(500).json({ message: 'Error processing vote' });
   }
 });
 
-
+// --- Start the Server ---
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
