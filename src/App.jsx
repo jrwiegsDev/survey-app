@@ -4,7 +4,7 @@ import Poll from './components/Poll';
 import PollResults from './components/PollResults';
 
 // The base URL for the backend API
-const API_URL = 'http://localhost:5001/api';
+const API_URL = 'https://survey-app-backend-mzcr.onrender.com/api';
 
 function App() {
   const [polls, setPolls] = useState([]);
